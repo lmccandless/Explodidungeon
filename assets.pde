@@ -5,15 +5,18 @@ PFont font;
 PShader derez;
 
 int mapLines[][];
-PShape l, u, ld, ud, ld2;
+PShape shGround, shRoof, shGroundDetail, shRoofDetail, shGroundDetail2;
 
 PImage enemySheet, enemySheet2;
 SpriteSheet enemySprites, enemySprites2;
 
 PImage explosionSheet;
-SpriteSheet explosionSprites
+SpriteSheet explosionSprites;
 
-  ;
+PImage playerSheet;
+SpriteSheet playerSprites;
+
+
 void loadAssets() {
   derez = loadShader("derez.glsl");
   font = loadFont("Ebrima-9.vlw");
@@ -23,8 +26,11 @@ void loadAssets() {
   enemySprites = new SpriteSheet(enemySheet, 6, 5);
   enemySprites2 = new SpriteSheet(enemySheet2, 6, 5);
   explosionSprites = new SpriteSheet(explosionSheet, 7, 3);
+  
+  playerSheet = loadImage("sheet.png");
+  playerSprites = new SpriteSheet(playerSheet,7,11);
   loadAudio();
-  ps = new FireSystem(200);
+  fireSystem = new FireSystem(200);
   playerLoad();
 }
 
@@ -58,40 +64,40 @@ void generateMap() {
   stroke(255);
   noStroke();
   fill(foreground);
-  u = createShape();
-  u.beginShape();
+  shRoof = createShape();
+  shRoof.beginShape();
   for (int i = 0; i < mapLength-1; i++) {
-    u.vertex(i*lineLength, mapLines[0][i]);
+    shRoof.vertex(i*lineLength, mapLines[0][i]);
   }
-  u.endShape();
+  shRoof.endShape();
 
-  l = createShape();
-  l.beginShape();
+  shGround = createShape();
+  shGround.beginShape();
   for (int i = 0; i < mapLength-1; i++) {
-    l.vertex(i*lineLength, mapLines[1][i] );
+    shGround.vertex(i*lineLength, mapLines[1][i] );
   }
-  l.endShape();
+  shGround.endShape();
 
   fill(midground);
-  ld = createShape();
-  ld.beginShape();
+  shGroundDetail = createShape();
+  shGroundDetail.beginShape();
   for (int i = 0; i < mapLength-1; i++) {
-    ld.vertex(i*lineLength, mapLines[1][i]-random(60));
+    shGroundDetail.vertex(i*lineLength, mapLines[1][i]-random(60));
   }
-  ld.endShape();
+  shGroundDetail.endShape();
 
-  ud = createShape();
-  ud.beginShape();
+  shRoofDetail = createShape();
+  shRoofDetail.beginShape();
   for (int i = 0; i < mapLength-1; i++) {
-    ud.vertex(i*lineLength, mapLines[0][i]+noise(i/100.0)*20+pow(random(3), 5));
+    shRoofDetail.vertex(i*lineLength, mapLines[0][i]+noise(i/100.0)*20+pow(random(3), 5));
   }
-  ud.endShape();
+  shRoofDetail.endShape();
 
   fill(farground);
-  ld2 = createShape();
-  ld2.beginShape();
+  shGroundDetail2 = createShape();
+  shGroundDetail2.beginShape();
   for (int i = 0; i < mapLength-1; i++) {
-    ld2.vertex(i*lineLength, mapLines[1][i]-random(160));
+    shGroundDetail2.vertex(i*lineLength, mapLines[1][i]-random(160));
   }
-  ld2.endShape();
+  shGroundDetail2.endShape();
 }

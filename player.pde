@@ -1,11 +1,9 @@
-int sW = 20, sH = 20;
+int sW = 0, sH = 0;
 float gravity = 0.3;
 int pHeight = 0;
 int pHeightHalf = 0;
 float accel = 0.5;
 float airMove = 0.1;
-
-SpriteSheet playerSheet;
 
 PVector playerLoc;
 PVector playerVel;
@@ -24,11 +22,8 @@ float playerHealth = 100;
 boolean airSwung;
 
 void playerLoad() {
-  PImage sheet = loadImage("sheet.png");
-  int cols = 7, rows = 11;
-  playerSheet = new SpriteSheet(sheet,cols,rows);
-  sW = sheet.width/cols;
-  sH = sheet.height/rows;
+  sW = playerSheet.width/7;
+  sH = playerSheet.height/11;
   imageMode(CENTER);
   pHeight = sH-5;
   pHeightHalf = pHeight/2;
@@ -42,13 +37,13 @@ void drawPlayerSprite(int i) {
 }
 
 void playerSprite(int i) {
-  image(playerSheet.sprites[i], playerLoc.x, playerLoc.y-pHeight, sW*2, sH*2);
+  image(playerSprites.sprites[i], playerLoc.x, playerLoc.y-pHeight, sW*2, sH*2);
 }
 void playerSpriteFlipped(int i) {
   pushMatrix();
   scale(-1, 1);
   translate(-playerLoc.x, playerLoc.y);
-  image(playerSheet.sprites[i], 0, -pHeight, sW*2, sH*2);
+  image(playerSprites.sprites[i], 0, -pHeight, sW*2, sH*2);
   popMatrix();
 }
 

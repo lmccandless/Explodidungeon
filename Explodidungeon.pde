@@ -3,13 +3,12 @@
  * MIT License: https://opensource.org/licenses/MIT
  */
  
-
 import ddf.minim.*;
 import ddf.minim.ugens.*;
 import ddf.minim.effects.*;
 
 Minim minim;
-FireSystem ps;
+FireSystem fireSystem;
 ArrayList<Enemy> enemies;
 
 final int w = 356, h = 240, w2 = w*2, h2 = h*2;
@@ -117,12 +116,12 @@ void drawStage() {
   cameraLoc.y -= (cameraLoc.y-playerLoc.y-100)*0.05;
   pushMatrix();
   translate((-cameraLoc.x+w-w/2)*0.9, (-(cameraLoc.y-w)*0.3)*0.9);
-  shape(ld2);
+  shape(shGroundDetail2);
   popMatrix();
   pushMatrix();
   translate(-cameraLoc.x+w-w/2, -(cameraLoc.y-w)*0.35);
-  shape(ld);
-  shape(ud);
+  shape(shGroundDetail);
+  shape(shRoofDetail);
   popMatrix();
 }
 
@@ -131,11 +130,11 @@ void drawLavaParticles() {
   s = max(0, s-3);
   for (int i = 0; i < 3+w2/lineLength; i++) {
     if (mapLines[1][s+i] > h2-26) {
-      ps.setEmitter((s+i)*lineLength, mapLines[1][s+i]);
+      fireSystem.setEmitter((s+i)*lineLength, mapLines[1][s+i]);
     }
   }
-  ps.update();
-  ps.display();
+  fireSystem.update();
+  fireSystem.display();
 }
 
 void lavaFloor() {
@@ -144,7 +143,7 @@ void lavaFloor() {
     asHit.trigger();
     shake = 16;
     playerHealth -= 5.0;
-    for (int i= 0; i < 60; i++)  ps.setEmitter(playerLoc.x+random(30)-15, 440-i);
+    for (int i= 0; i < 60; i++)  fireSystem.setEmitter(playerLoc.x+random(30)-15, 440-i);
   }
   noStroke();
   fill(168, 16, 0);
@@ -181,8 +180,8 @@ void gameDraw() {
   translate(-cameraLoc.x+w-w/2, -(cameraLoc.y-w)*0.3);
   lavaFloor();
   drawLavaParticles();
-  shape(l);
-  shape(u);
+  shape(shGround);
+  shape(shRoof);
   filter(derez);
   drawPlayer();
   movePlayer();
@@ -239,8 +238,8 @@ void menuDraw() {
   translate(-cameraLoc.x+w-w/2, -(cameraLoc.y-w)*0.3);
   lavaFloor();
   drawLavaParticles();
-  shape(l);
-  shape(u);
+  shape(shGround);
+  shape(shRoof);
   filter(derez);
   popMatrix();
 
@@ -255,8 +254,8 @@ void menuDraw() {
   textSize(24);
   fill(255);
   rect(mouseX, mouseY, 2, 2);
-  ps.update();
-  ps.display();
+  fireSystem.update();
+  fireSystem.display();
    fill(0);
   
   text("WASD = move,   space = jump,   / or click = attack", 120, 468+2);

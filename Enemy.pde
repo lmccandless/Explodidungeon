@@ -92,7 +92,7 @@ class Enemy {
     asDead.trigger();
     hurt+=0.001;
     health--;
-     for (int i = 0; i < 10; i++)ps.setEmitter(loc.x,loc.y);
+     for (int i = 0; i < 10; i++)fireSystem.setEmitter(loc.x,loc.y);
     if (health==0){ 
       dying += 0.001;
      
@@ -125,10 +125,10 @@ class Enemy {
         vel.x = playerVel.x;
         vel.y = 1;
         int xL = floor(loc.x/lineLength);
-        PVector pl = l.getVertex(xL);
+        PVector pl = shGround.getVertex(xL);
         pl.y += 110;
         score++;
-        l.setVertex(xL, pl);
+        shGround.setVertex(xL, pl);
         mapLines[1][xL] = (int)pl.y;
         explode++;
         explodeType = floor(random(3));
