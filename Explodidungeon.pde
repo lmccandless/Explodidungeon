@@ -81,25 +81,6 @@ PVector getLSlope(PVector loc) {
   return p1.sub(p2).normalize();
 }
 
-PVector getCollision(PVector loc, PVector vel) {
-  int x = floor(loc.x/lineLength);
-  PVector p1 = new PVector(x*lineLength, mapLines[0][x]);
-  PVector p2 = new PVector((x+1)*lineLength, mapLines[0][x+1]);
-  PVector intersect =  p1.copy();
-  float xx = (loc.x/lineLength-x);
-  intersect.lerp(p2, xx);
-  if (loc.y+vel.y<=intersect.y) {
-    PVector slope = p1.copy().sub(p2).normalize();
-    slope.rotate(HALF_PI);
-  }
-  p1 = new PVector(x*lineLength, mapLines[1][x]);
-  p2 = new PVector((x+1)*lineLength, mapLines[1][x+1]);
-  intersect = p1.copy();
-  xx = (loc.x/lineLength-x);
-  intersect.lerp(p2, xx);
-  return intersect;
-}
-
 float shake = 0.0;
 void screenShake(){
   if (shake>0){

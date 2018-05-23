@@ -29,9 +29,15 @@ void playerLoad() {
   pHeightHalf = pHeight/2;
 }
 
+
+float playerDir = 0.0;
 void drawPlayerSprite(int i) {
+  if (keys['a']) playerDir = -1;
+  if (keys['d'])playerDir = 1;
+  if(abs(playerVel.x)>0.9)playerDir = playerVel.x/(abs(playerVel.x));
   if (shake>0)tint(0,0,0,255);
-  if (playerVel.x<0) playerSpriteFlipped(i);
+ // playerDir -= (playerDir-playerVel.x)*0.01;
+  if (playerDir<0) playerSpriteFlipped(i);
   else playerSprite(i);
   noTint();
 }
@@ -76,12 +82,12 @@ void drawPlayer() {
     } else drawPlayerSprite((int)attacking + 55);
   } else if (onFloor) {
 
-    if (abs(playerVel.x)<0.45) {
+    if ((abs(playerVel.x)<0.50) && (!keys['a']) && (!keys['d'])){
       drawPlayerSprite((int)idle);
       idle+=0.1;
       if (idle>4)idle=0;
     } else {
-      float dir = abs(playerVel.x);
+      float dir =  abs(playerVel.x);
       if (dir>0) {
         running += 0.05*dir;//dir/6.0;
 
@@ -140,8 +146,9 @@ void movePlayer() {
     if (keys['d']) playerVel.x+=accel;
     float slope = getLSlope(playerLoc).rotate(HALF_PI).heading();
     slope+=HALF_PI;
+    if (abs(slope) > 0.7) playerVel.x +=(slope*slope*slope)/6.0;
     if (((playerVel.x >0)&&(slope<0)) || ((playerVel.x <0)&&(slope>0))) 
-      playerVel.x*= 1-pow(abs((slope)/2.0), 2);
+      playerVel.x*= 1-pow(abs((slope)/4.0), 2);
     playerVel.x*=0.9;
   } else {
     if (keys['a']) playerVel.x-=accel*airMove;
